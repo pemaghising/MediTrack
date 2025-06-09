@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { ArrowLeft, Plus, Edit, Trash2 } from "lucide-react"
+import { Plus, Edit, Trash2, ChevronRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -21,9 +21,11 @@ import {
 
 export default function MedicationsPage() {
   const [medications, setMedications] = useState<Medication[]>([])
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     setMedications(getAllMedications())
+    setIsLoading(false)
   }, [])
 
   const handleDelete = (medicationID: string) => {
@@ -33,10 +35,7 @@ export default function MedicationsPage() {
 
   const formatTime = (time: string) => {
     const [hours, minutes] = time.split(":")
-    const hour = Number.parseInt(hours)
-    const ampm = hour >= 12 ? "PM" : "AM"
-    const displayHour = hour % 12 || 12
-    return `${displayHour}:${minutes} ${ampm}`
+    return `${hours}:${minutes}`
   }
 
   const getScheduleSummary = (reminderTimes: string[]) => {
@@ -47,63 +46,87 @@ export default function MedicationsPage() {
     }
   }
 
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-gray-900 mb-4">MediTrack</h1>
+          <p className="text-gray-600">Loading...</p>
+        </div>
+      </div>
+    )
+  }
+
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <div className="border-b bg-white sticky top-0 z-10">
-        <div className="max-w-md mx-auto px-4 py-3">
-          <div className="flex items-center gap-3">
-            <Link href="/">
-              <Button variant="ghost" size="sm">
-                <ArrowLeft className="h-4 w-4" />
-              </Button>
-            </Link>
-            <h1 className="text-xl font-bold">My Medications</h1>
-          </div>
+      <div className="bg-white px-4 py-4">
+        <div className="flex items-center justify-center mb-6">
+          <h1 className="text-xl font-semibold text-gray-900">MediTrack</h1>
+        </div>
+
+        {/* Tab Navigation */}
+        <div className="flex gap-1 mb-6">
+          <Link href="/">
+            <Button variant="ghost" className="rounded-full px-6 py-2 text-gray-600">
+              Home
+            </Button>
+          </Link>
+          <Button variant="default" className="rounded-full px-6 py-2 bg-gray-900 text-white">
+            Medications
+          </Button>
+          <Link href="/calendar">
+            <Button variant="ghost" className="rounded-full px-6 py-2 text-gray-600">
+              Calendar
+            </Button>
+          </Link>
         </div>
       </div>
 
-      <div className="max-w-md mx-auto p-4">
-        <div className="space-y-3 mb-20">
-          {medications.length === 0 ? (
-            <Card>
-              <CardContent className="p-6 text-center">
-                <p className="text-muted-foreground mb-4">No medications added yet</p>
-                <Link href="/medications/add">
-                  <Button>
-                    <Plus className="h-4 w-4 mr-2" />
-                    Add Medication
-                  </Button>
-                </Link>
-              </CardContent>
-            </Card>
-          ) : (
-            medications.map((medication) => (
-              <Card key={medication.medicationID}>
-                <CardContent className="p-4">
-                  <div className="flex items-start justify-between">
+      {/* Content */}
+      <div className="px-4 pb-24">
+        {medications.length === 0 ? (
+          <div className="text-center py-16">
+            <div className="w-20 h-20 bg-gray-200 rounded-full mx-auto mb-6 flex items-center justify-center">
+              <Plus className="h-10 w-10 text-gray-400" />
+            </div>
+            <p className="text-lg text-gray-600 mb-6">No medications added yet</p>
+            <Link href="/medications/add">
+              <Button className="bg-green-500 hover:bg-green-600 text-white rounded-full px-8 py-3 text-lg">
+                Add Medication
+              </Button>
+            </Link>
+          </div>
+        ) : (
+          <div className="space-y-4">
+            {medications.map((medication) => (
+              <Card key={medication.medicationID} className="bg-white border-0 shadow-sm">
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-between">
                     <div className="flex-1">
-                      <h3 className="font-semibold text-lg">{medication.medicationName}</h3>
-                      <p className="text-muted-foreground mb-2">{medication.dosage}</p>
-                      <Badge variant="outline">{getScheduleSummary(medication.reminderTimes)}</Badge>
-                      <div className="flex flex-wrap gap-1 mt-2">
+                      <h3 className="font-semibold text-gray-900 text-xl mb-2">{medication.medicationName}</h3>
+                      <p className="text-gray-600 mb-3 text-lg">{medication.dosage}</p>
+                      <Badge variant="outline" className="text-sm mb-3">
+                        {getScheduleSummary(medication.reminderTimes)}
+                      </Badge>
+                      <div className="flex flex-wrap gap-2 mt-3">
                         {medication.reminderTimes.map((time, index) => (
-                          <Badge key={index} variant="secondary" className="text-xs">
+                          <Badge key={index} variant="secondary" className="text-sm">
                             {formatTime(time)}
                           </Badge>
                         ))}
                       </div>
                     </div>
-                    <div className="flex gap-2">
+                    <div className="flex items-center gap-3">
                       <Link href={`/medications/edit/${medication.medicationID}`}>
                         <Button variant="ghost" size="sm">
-                          <Edit className="h-4 w-4" />
+                          <Edit className="h-5 w-5" />
                         </Button>
                       </Link>
                       <AlertDialog>
                         <AlertDialogTrigger asChild>
                           <Button variant="ghost" size="sm" className="text-red-600 hover:text-red-700">
-                            <Trash2 className="h-4 w-4" />
+                            <Trash2 className="h-5 w-5" />
                           </Button>
                         </AlertDialogTrigger>
                         <AlertDialogContent>
@@ -125,21 +148,25 @@ export default function MedicationsPage() {
                           </AlertDialogFooter>
                         </AlertDialogContent>
                       </AlertDialog>
+                      <ChevronRight className="h-6 w-6 text-gray-400" />
                     </div>
                   </div>
                 </CardContent>
               </Card>
-            ))
-          )}
-        </div>
-
-        {/* Floating Action Button */}
-        <Link href="/medications/add">
-          <Button size="lg" className="fixed bottom-6 right-6 h-14 w-14 rounded-full shadow-lg">
-            <Plus className="h-6 w-6" />
-          </Button>
-        </Link>
+            ))}
+          </div>
+        )}
       </div>
+
+      {/* Floating Action Button */}
+      <Link href="/medications/add">
+        <Button
+          size="lg"
+          className="fixed bottom-6 right-6 h-14 w-14 rounded-full shadow-lg bg-green-500 hover:bg-green-600 text-white"
+        >
+          <Plus className="h-6 w-6" />
+        </Button>
+      </Link>
     </div>
   )
 }
