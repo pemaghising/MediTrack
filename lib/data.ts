@@ -279,3 +279,12 @@ export const markDoseAsTaken = (logId: string) => {
     saveDoseLogsToStorage(logs)
   }
 }
+
+// Add this function at the end of the file
+export const initializeApp = () => {
+  // Update missed doses when app loads
+  updateMissedDoses()
+
+  // Initialize sample data if needed
+  initializeSampleData()
+}

@@ -8,7 +8,7 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
 import { Logo } from "@/components/logo"
-import { type Medication, type DoseLog, getTodaysMedications, markDoseAsTaken } from "@/lib/data"
+import { type Medication, type DoseLog, getTodaysMedications, markDoseAsTaken, initializeApp } from "@/lib/data"
 
 export default function HomePage() {
   const [todaysMeds, setTodaysMeds] = useState<
@@ -20,6 +20,7 @@ export default function HomePage() {
   >([])
 
   useEffect(() => {
+    initializeApp()
     setTodaysMeds(getTodaysMedications())
   }, [])
 

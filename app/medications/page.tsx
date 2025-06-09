@@ -7,7 +7,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
 import { Logo } from "@/components/logo"
-import { type Medication, getAllMedications, deleteMedication } from "@/lib/data"
+import { type Medication, getAllMedications, deleteMedication, initializeApp } from "@/lib/data"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -24,6 +24,7 @@ export default function MedicationsPage() {
   const [medications, setMedications] = useState<Medication[]>([])
 
   useEffect(() => {
+    initializeApp()
     setMedications(getAllMedications())
   }, [])
 
