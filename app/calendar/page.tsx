@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
-import { Logo } from "@/components/logo"
 import { getAdherenceForMonth, type DoseLog, type Medication } from "@/lib/data"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 
@@ -67,7 +66,7 @@ export default function CalendarPage() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="text-center">
-          <Logo size="lg" className="mx-auto mb-4" />
+          <h1 className="text-2xl font-bold text-blue-600 mb-4">MediTrack</h1>
           <p className="text-muted-foreground">Loading your calendar...</p>
         </div>
       </div>
@@ -106,7 +105,6 @@ export default function CalendarPage() {
                 <ArrowLeft className="h-4 w-4" />
               </Button>
             </Link>
-            <Logo size="sm" />
             <h1 className="text-xl font-bold">My Adherence Log</h1>
           </div>
         </div>
@@ -183,8 +181,7 @@ export default function CalendarPage() {
                   {day.dayData && day.dayData.totalScheduled > 0 && (
                     <DialogContent>
                       <DialogHeader>
-                        <DialogTitle className="flex items-center gap-2">
-                          <Logo size="sm" showText={false} />
+                        <DialogTitle>
                           {day.date.toLocaleDateString("en-US", {
                             weekday: "long",
                             month: "long",

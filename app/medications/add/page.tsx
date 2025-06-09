@@ -8,7 +8,6 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { Logo } from "@/components/logo"
 import { addMedication } from "@/lib/data"
 
 export default function AddMedicationPage() {
@@ -65,7 +64,6 @@ export default function AddMedicationPage() {
                 <ArrowLeft className="h-4 w-4" />
               </Button>
             </Link>
-            <Logo size="sm" />
             <h1 className="text-xl font-bold">Add Medication</h1>
           </div>
         </div>
@@ -74,10 +72,7 @@ export default function AddMedicationPage() {
       <div className="max-w-md mx-auto p-4">
         <Card>
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Logo size="sm" showText={false} />
-              Medication Details
-            </CardTitle>
+            <CardTitle>Medication Details</CardTitle>
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="space-y-2">

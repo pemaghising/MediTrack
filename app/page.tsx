@@ -7,7 +7,6 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
-import { Logo } from "@/components/logo"
 import { type Medication, type DoseLog, getTodaysMedications, markDoseAsTaken, updateMissedDoses } from "@/lib/data"
 
 export default function HomePage() {
@@ -46,7 +45,7 @@ export default function HomePage() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="text-center">
-          <Logo size="lg" className="mx-auto mb-4" />
+          <h1 className="text-2xl font-bold text-blue-600 mb-4">MediTrack</h1>
           <p className="text-muted-foreground">Loading your medications...</p>
         </div>
       </div>
@@ -59,7 +58,7 @@ export default function HomePage() {
       <nav className="border-b bg-white sticky top-0 z-10">
         <div className="max-w-md mx-auto px-4 py-3">
           <div className="flex items-center justify-between">
-            <Logo size="md" />
+            <h1 className="text-xl font-bold text-blue-600">MediTrack</h1>
             <div className="flex gap-2">
               <Link href="/">
                 <Button variant="ghost" size="sm">
@@ -98,7 +97,7 @@ export default function HomePage() {
           {todaysMeds.length === 0 ? (
             <Card>
               <CardContent className="p-6 text-center">
-                <Logo size="lg" showText={false} className="mx-auto mb-4 opacity-50" />
+                <div className="w-16 h-16 bg-blue-100 rounded-lg mx-auto mb-4 opacity-50"></div>
                 <p className="text-muted-foreground mb-4">No medications scheduled for today</p>
                 <Link href="/medications/add">
                   <Button className="mt-4">

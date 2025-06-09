@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
-import { Logo } from "@/components/logo"
 import { type Medication, getAllMedications, deleteMedication } from "@/lib/data"
 import {
   AlertDialog,
@@ -54,7 +53,7 @@ export default function MedicationsPage() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="text-center">
-          <Logo size="lg" className="mx-auto mb-4" />
+          <h1 className="text-2xl font-bold text-blue-600 mb-4">MediTrack</h1>
           <p className="text-muted-foreground">Loading your medications...</p>
         </div>
       </div>
@@ -72,7 +71,6 @@ export default function MedicationsPage() {
                 <ArrowLeft className="h-4 w-4" />
               </Button>
             </Link>
-            <Logo size="sm" />
             <h1 className="text-xl font-bold">My Medications</h1>
           </div>
         </div>
@@ -83,7 +81,7 @@ export default function MedicationsPage() {
           {medications.length === 0 ? (
             <Card>
               <CardContent className="p-6 text-center">
-                <Logo size="lg" showText={false} className="mx-auto mb-4 opacity-50" />
+                <div className="w-16 h-16 bg-blue-100 rounded-lg mx-auto mb-4 opacity-50"></div>
                 <p className="text-muted-foreground mb-4">No medications added yet</p>
                 <Link href="/medications/add">
                   <Button>
