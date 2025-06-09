@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { ArrowLeft, ChevronLeft, ChevronRight } from "lucide-react"
+import { ChevronLeft, ChevronRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -41,7 +41,7 @@ export default function CalendarPage() {
   }
 
   const getDayColor = (adherenceRate: number, totalScheduled: number) => {
-    if (totalScheduled === 0) return "bg-gray-50"
+    if (totalScheduled === 0) return "bg-gray-100"
     if (adherenceRate === 1) return "bg-green-100 border-green-300"
     if (adherenceRate > 0) return "bg-yellow-100 border-yellow-300"
     return "bg-red-100 border-red-300"
@@ -56,18 +56,15 @@ export default function CalendarPage() {
 
   const formatTime = (time: string) => {
     const [hours, minutes] = time.split(":")
-    const hour = Number.parseInt(hours)
-    const ampm = hour >= 12 ? "PM" : "AM"
-    const displayHour = hour % 12 || 12
-    return `${displayHour}:${minutes} ${ampm}`
+    return `${hours}:${minutes}`
   }
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-blue-600 mb-4">MediTrack</h1>
-          <p className="text-muted-foreground">Loading your calendar...</p>
+          <h1 className="text-2xl font-bold text-gray-900 mb-4">MediTrack</h1>
+          <p className="text-gray-600">Loading...</p>
         </div>
       </div>
     )
@@ -95,37 +92,72 @@ export default function CalendarPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
-      <div className="border-b bg-white sticky top-0 z-10">
-        <div className="max-w-md mx-auto px-4 py-3">
-          <div className="flex items-center gap-3">
-            <Link href="/">
-              <Button variant="ghost" size="sm">
-                <ArrowLeft className="h-4 w-4" />
-              </Button>
-            </Link>
-            <h1 className="text-xl font-bold">My Adherence Log</h1>
+    <div className="min-h-screen bg-gray-50">
+      {/* Status Bar */}
+      <div className="bg-white px-4 py-2 flex justify-between items-center text-sm font-medium">
+        <span>{new Date().toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", hour12: false })}</span>
+        <div className="flex items-center gap-1">
+          <div className="flex gap-1">
+            <div className="w-1 h-3 bg-gray-900 rounded-full"></div>
+            <div className="w-1 h-3 bg-gray-900 rounded-full"></div>
+            <div className="w-1 h-3 bg-gray-900 rounded-full"></div>
+            <div className="w-1 h-3 bg-gray-400 rounded-full"></div>
+          </div>
+          <div className="w-4 h-3 border border-gray-900 rounded-sm ml-2">
+            <div className="w-3 h-2 bg-gray-900 rounded-sm m-0.5"></div>
           </div>
         </div>
       </div>
 
-      <div className="max-w-md mx-auto p-4">
-        {/* Month Navigation */}
-        <div className="flex items-center justify-between mb-6">
-          <Button variant="ghost" onClick={() => navigateMonth("prev")}>
-            <ChevronLeft className="h-4 w-4" />
+      {/* Header */}
+      <div className="bg-white px-4 py-4">
+        <div className="flex items-center gap-4 mb-6">
+          <Link href="/">
+            <ChevronLeft className="h-6 w-6 text-gray-600" />
+          </Link>
+          <h1 className="text-xl font-semibold text-gray-900">Adherence Tracking</h1>
+        </div>
+
+        {/* Tab Navigation */}
+        <div className="flex gap-1 mb-6">
+          <Link href="/">
+            <Button variant="ghost" className="rounded-full px-6 py-2 text-gray-600">
+              Calendar
+            </Button>
+          </Link>
+          <Link href="/medications">
+            <Button variant="ghost" className="rounded-full px-6 py-2 text-gray-600">
+              Medications
+            </Button>
+          </Link>
+          <Button variant="default" className="rounded-full px-6 py-2 bg-gray-900 text-white">
+            Tracking
           </Button>
-          <h2 className="text-lg font-semibold">
-            {currentDate.toLocaleDateString("en-US", { month: "long", year: "numeric" })}
-          </h2>
-          <Button variant="ghost" onClick={() => navigateMonth("next")}>
-            <ChevronRight className="h-4 w-4" />
+          <Button variant="ghost" className="rounded-full px-6 py-2 text-gray-600">
+            Profile
           </Button>
         </div>
 
+        {/* Month Navigation */}
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-lg font-semibold text-gray-900">
+            {currentDate.toLocaleDateString("en-US", { month: "long", year: "numeric" })}
+          </h2>
+          <div className="flex gap-2">
+            <Button variant="ghost" size="sm" onClick={() => navigateMonth("prev")}>
+              <ChevronLeft className="h-4 w-4" />
+            </Button>
+            <Button variant="ghost" size="sm" onClick={() => navigateMonth("next")}>
+              <ChevronRight className="h-4 w-4" />
+            </Button>
+          </div>
+        </div>
+      </div>
+
+      {/* Calendar Content */}
+      <div className="px-4 pb-6">
         {/* Legend */}
-        <Card className="mb-4">
+        <Card className="mb-4 bg-white border-0 shadow-sm">
           <CardContent className="p-4">
             <div className="text-sm space-y-2">
               <div className="flex items-center gap-2">
@@ -141,7 +173,7 @@ export default function CalendarPage() {
                 <span>No medications taken</span>
               </div>
               <div className="flex items-center gap-2">
-                <div className="w-4 h-4 bg-gray-50 rounded"></div>
+                <div className="w-4 h-4 bg-gray-100 rounded"></div>
                 <span>No medications scheduled</span>
               </div>
             </div>
@@ -149,12 +181,12 @@ export default function CalendarPage() {
         </Card>
 
         {/* Calendar Grid */}
-        <Card>
+        <Card className="bg-white border-0 shadow-sm">
           <CardContent className="p-4">
             {/* Day headers */}
             <div className="grid grid-cols-7 gap-1 mb-2">
               {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
-                <div key={day} className="text-center text-sm font-medium text-muted-foreground py-2">
+                <div key={day} className="text-center text-sm font-medium text-gray-600 py-2">
                   {day}
                 </div>
               ))}
@@ -169,13 +201,15 @@ export default function CalendarPage() {
                       className={`
                         aspect-square p-1 text-sm rounded border-2 border-transparent
                         ${day.isCurrentMonth ? "" : "opacity-30"}
-                        ${day.dayData ? getDayColor(day.dayData.adherenceRate, day.dayData.totalScheduled) : "bg-gray-50"}
+                        ${day.dayData ? getDayColor(day.dayData.adherenceRate, day.dayData.totalScheduled) : "bg-gray-100"}
                         ${day.dayData ? getDayTextColor(day.dayData.adherenceRate, day.dayData.totalScheduled) : "text-gray-600"}
-                        hover:border-blue-300 transition-colors
+                        hover:border-gray-300 transition-colors
                       `}
                       disabled={!day.dayData || day.dayData.totalScheduled === 0}
                     >
-                      <div className="w-full h-full flex items-center justify-center">{day.date.getDate()}</div>
+                      <div className="w-full h-full flex items-center justify-center font-medium">
+                        {day.date.getDate()}
+                      </div>
                     </button>
                   </DialogTrigger>
                   {day.dayData && day.dayData.totalScheduled > 0 && (
@@ -192,7 +226,7 @@ export default function CalendarPage() {
                       <div className="space-y-4">
                         <div className="text-center">
                           <div className="text-2xl font-bold">{Math.round(day.dayData.adherenceRate * 100)}%</div>
-                          <div className="text-sm text-muted-foreground">
+                          <div className="text-sm text-gray-600">
                             {day.dayData.totalTaken} of {day.dayData.totalScheduled} doses taken
                           </div>
                         </div>
@@ -201,7 +235,7 @@ export default function CalendarPage() {
                             <div key={logIndex} className="flex items-center justify-between p-2 bg-gray-50 rounded">
                               <div>
                                 <div className="font-medium">{medication.medicationName}</div>
-                                <div className="text-sm text-muted-foreground">{formatTime(log.scheduledTime)}</div>
+                                <div className="text-sm text-gray-600">{formatTime(log.scheduledTime)}</div>
                               </div>
                               <Badge
                                 variant={
