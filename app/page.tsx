@@ -7,6 +7,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
+import { Logo } from "@/components/logo"
 import { type Medication, type DoseLog, getTodaysMedications, markDoseAsTaken } from "@/lib/data"
 
 export default function HomePage() {
@@ -41,7 +42,7 @@ export default function HomePage() {
       <nav className="border-b bg-white sticky top-0 z-10">
         <div className="max-w-md mx-auto px-4 py-3">
           <div className="flex items-center justify-between">
-            <h1 className="text-xl font-bold text-blue-600">MediTrack</h1>
+            <Logo size="md" />
             <div className="flex gap-2">
               <Link href="/">
                 <Button variant="ghost" size="sm">
@@ -80,7 +81,8 @@ export default function HomePage() {
           {todaysMeds.length === 0 ? (
             <Card>
               <CardContent className="p-6 text-center">
-                <p className="text-muted-foreground">No medications scheduled for today</p>
+                <Logo size="lg" showText={false} className="mx-auto mb-4 opacity-50" />
+                <p className="text-muted-foreground mb-4">No medications scheduled for today</p>
                 <Link href="/medications/add">
                   <Button className="mt-4">
                     <Plus className="h-4 w-4 mr-2" />
