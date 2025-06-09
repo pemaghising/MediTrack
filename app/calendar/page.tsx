@@ -93,42 +93,31 @@ export default function CalendarPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Simple Header */}
-      <div className="bg-white px-4 py-3 text-center border-b">
-        <span className="text-sm font-medium text-gray-600">MediTrack</span>
-      </div>
-
       {/* Header */}
       <div className="bg-white px-4 py-4">
-        <div className="flex items-center gap-4 mb-6">
-          <Link href="/">
-            <ChevronLeft className="h-6 w-6 text-gray-600" />
-          </Link>
-          <h1 className="text-xl font-semibold text-gray-900">Adherence Tracking</h1>
+        <div className="flex items-center justify-center mb-6">
+          <h1 className="text-xl font-semibold text-gray-900">MediTrack</h1>
         </div>
 
         {/* Tab Navigation */}
-        <div className="grid grid-cols-2 gap-2 mb-6">
-          <Link href="/" className="w-full">
-            <Button variant="ghost" className="rounded-lg py-2 text-gray-600 w-full">
-              Calendar
+        <div className="flex gap-1 mb-6">
+          <Link href="/">
+            <Button variant="ghost" className="rounded-full px-6 py-2 text-gray-600">
+              Home
             </Button>
           </Link>
-          <Link href="/medications" className="w-full">
-            <Button variant="ghost" className="rounded-lg py-2 text-gray-600 w-full">
+          <Link href="/medications">
+            <Button variant="ghost" className="rounded-full px-6 py-2 text-gray-600">
               Medications
             </Button>
           </Link>
-          <Button variant="default" className="rounded-lg py-2 bg-gray-900 text-white">
-            Tracking
-          </Button>
-          <Button variant="ghost" className="rounded-lg py-2 text-gray-600">
-            Profile
+          <Button variant="default" className="rounded-full px-6 py-2 bg-gray-900 text-white">
+            Calendar
           </Button>
         </div>
 
         {/* Month Navigation */}
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center justify-between mb-4">
           <h2 className="text-lg font-semibold text-gray-900">
             {currentDate.toLocaleDateString("en-US", { month: "long", year: "numeric" })}
           </h2>
@@ -144,34 +133,34 @@ export default function CalendarPage() {
       </div>
 
       {/* Calendar Content */}
-      <div className="px-4 pb-6">
+      <div className="px-4 pb-8">
         {/* Legend */}
-        <div className="mb-4 flex flex-col gap-2">
-          <div className="flex items-center gap-2 bg-white p-3 rounded-lg shadow-sm">
-            <div className="w-4 h-4 bg-green-100 border border-green-300 rounded"></div>
-            <span className="text-sm">All medications taken</span>
+        <div className="mb-4 grid grid-cols-2 gap-2">
+          <div className="flex items-center gap-2 bg-white p-2 rounded-lg shadow-sm">
+            <div className="w-3 h-3 bg-green-100 border border-green-300 rounded"></div>
+            <span className="text-xs">All taken</span>
           </div>
-          <div className="flex items-center gap-2 bg-white p-3 rounded-lg shadow-sm">
-            <div className="w-4 h-4 bg-yellow-100 border border-yellow-300 rounded"></div>
-            <span className="text-sm">Some medications taken</span>
+          <div className="flex items-center gap-2 bg-white p-2 rounded-lg shadow-sm">
+            <div className="w-3 h-3 bg-yellow-100 border border-yellow-300 rounded"></div>
+            <span className="text-xs">Some taken</span>
           </div>
-          <div className="flex items-center gap-2 bg-white p-3 rounded-lg shadow-sm">
-            <div className="w-4 h-4 bg-red-100 border border-red-300 rounded"></div>
-            <span className="text-sm">No medications taken</span>
+          <div className="flex items-center gap-2 bg-white p-2 rounded-lg shadow-sm">
+            <div className="w-3 h-3 bg-red-100 border border-red-300 rounded"></div>
+            <span className="text-xs">None taken</span>
           </div>
-          <div className="flex items-center gap-2 bg-white p-3 rounded-lg shadow-sm">
-            <div className="w-4 h-4 bg-gray-100 rounded"></div>
-            <span className="text-sm">No medications scheduled</span>
+          <div className="flex items-center gap-2 bg-white p-2 rounded-lg shadow-sm">
+            <div className="w-3 h-3 bg-gray-100 rounded"></div>
+            <span className="text-xs">No schedule</span>
           </div>
         </div>
 
         {/* Calendar Grid */}
         <Card className="bg-white border-0 shadow-sm">
-          <CardContent className="p-4">
+          <CardContent className="p-3">
             {/* Day headers */}
             <div className="grid grid-cols-7 gap-1 mb-2">
-              {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
-                <div key={day} className="text-center text-sm font-medium text-gray-600 py-2">
+              {["S", "M", "T", "W", "T", "F", "S"].map((day) => (
+                <div key={day} className="text-center text-xs font-medium text-gray-600 py-1">
                   {day}
                 </div>
               ))}
@@ -184,7 +173,7 @@ export default function CalendarPage() {
                   <DialogTrigger asChild>
                     <button
                       className={`
-                        aspect-square p-1 text-sm rounded border-2 border-transparent
+                        aspect-square p-1 text-xs rounded border border-transparent
                         ${day.isCurrentMonth ? "" : "opacity-30"}
                         ${day.dayData ? getDayColor(day.dayData.adherenceRate, day.dayData.totalScheduled) : "bg-gray-100"}
                         ${day.dayData ? getDayTextColor(day.dayData.adherenceRate, day.dayData.totalScheduled) : "text-gray-600"}
