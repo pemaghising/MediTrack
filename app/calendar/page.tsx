@@ -10,25 +10,6 @@ import { Logo } from "@/components/logo"
 import { getAdherenceForMonth, type DoseLog, type Medication } from "@/lib/data"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 
-// Add these functions after the imports and before the component
-const CALENDAR_DATE_KEY = "meditrack_calendar_date"
-
-const saveCalendarDate = (date: Date) => {
-  if (typeof window !== "undefined") {
-    localStorage.setItem(CALENDAR_DATE_KEY, date.toISOString())
-  }
-}
-
-const getSavedCalendarDate = (): Date => {
-  if (typeof window !== "undefined") {
-    const saved = localStorage.getItem(CALENDAR_DATE_KEY)
-    if (saved) {
-      return new Date(saved)
-    }
-  }
-  return new Date()
-}
-
 interface DayAdherence {
   date: Date
   totalScheduled: number
@@ -41,11 +22,13 @@ interface DayAdherence {
 }
 
 export default function CalendarPage() {
-  const [currentDate, setCurrentDate] = useState(getSavedCalendarDate())
+  const [currentDate, setCurrentDate] = useState(new Date())
   const [monthData, setMonthData] = useState<DayAdherence[]>([])
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     setMonthData(getAdherenceForMonth(currentDate))
+    setIsLoading(false)
   }, [currentDate])
 
   const navigateMonth = (direction: "prev" | "next") => {
@@ -56,7 +39,6 @@ export default function CalendarPage() {
       newDate.setMonth(newDate.getMonth() + 1)
     }
     setCurrentDate(newDate)
-    saveCalendarDate(newDate)
   }
 
   const getDayColor = (adherenceRate: number, totalScheduled: number) => {
@@ -81,6 +63,17 @@ export default function CalendarPage() {
     return `${displayHour}:${minutes} ${ampm}`
   }
 
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="text-center">
+          <Logo size="lg" className="mx-auto mb-4" />
+          <p className="text-muted-foreground">Loading your calendar...</p>
+        </div>
+      </div>
+    )
+  }
+
   // Generate calendar grid
   const firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1)
   const lastDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0)
@@ -101,10 +94,6 @@ export default function CalendarPage() {
 
     currentCalendarDate.setDate(currentCalendarDate.getDate() + 1)
   }
-
-  useEffect(() => {
-    saveCalendarDate(currentDate)
-  }, [])
 
   return (
     <div className="min-h-screen bg-background">

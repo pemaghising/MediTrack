@@ -8,7 +8,7 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
 import { Logo } from "@/components/logo"
-import { type Medication, type DoseLog, getTodaysMedications, markDoseAsTaken, initializeApp } from "@/lib/data"
+import { type Medication, type DoseLog, getTodaysMedications, markDoseAsTaken, updateMissedDoses } from "@/lib/data"
 
 export default function HomePage() {
   const [todaysMeds, setTodaysMeds] = useState<
@@ -18,10 +18,15 @@ export default function HomePage() {
       log: DoseLog
     }>
   >([])
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    initializeApp()
+    // Update missed doses first
+    updateMissedDoses()
+
+    // Then get today's medications
     setTodaysMeds(getTodaysMedications())
+    setIsLoading(false)
   }, [])
 
   const handleMarkAsTaken = (logId: string) => {
@@ -35,6 +40,17 @@ export default function HomePage() {
     const ampm = hour >= 12 ? "PM" : "AM"
     const displayHour = hour % 12 || 12
     return `${displayHour}:${minutes} ${ampm}`
+  }
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="text-center">
+          <Logo size="lg" className="mx-auto mb-4" />
+          <p className="text-muted-foreground">Loading your medications...</p>
+        </div>
+      </div>
+    )
   }
 
   return (

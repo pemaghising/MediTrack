@@ -7,7 +7,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
 import { Logo } from "@/components/logo"
-import { type Medication, getAllMedications, deleteMedication, initializeApp } from "@/lib/data"
+import { type Medication, getAllMedications, deleteMedication } from "@/lib/data"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -22,10 +22,11 @@ import {
 
 export default function MedicationsPage() {
   const [medications, setMedications] = useState<Medication[]>([])
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    initializeApp()
     setMedications(getAllMedications())
+    setIsLoading(false)
   }, [])
 
   const handleDelete = (medicationID: string) => {
@@ -47,6 +48,17 @@ export default function MedicationsPage() {
     } else {
       return `${reminderTimes.length} times daily`
     }
+  }
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="text-center">
+          <Logo size="lg" className="mx-auto mb-4" />
+          <p className="text-muted-foreground">Loading your medications...</p>
+        </div>
+      </div>
+    )
   }
 
   return (

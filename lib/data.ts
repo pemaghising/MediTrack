@@ -25,28 +25,47 @@ const getLocalDateString = (date: Date): string => {
 // Local storage keys
 const MEDICATIONS_KEY = "meditrack_medications"
 const DOSE_LOGS_KEY = "meditrack_dose_logs"
+const INITIALIZED_KEY = "meditrack_initialized"
 
-// Helper functions for local storage
+// Helper functions for local storage with safety checks
 const getMedicationsFromStorage = (): Medication[] => {
   if (typeof window === "undefined") return []
-  const stored = localStorage.getItem(MEDICATIONS_KEY)
-  return stored ? JSON.parse(stored) : []
+  try {
+    const stored = localStorage.getItem(MEDICATIONS_KEY)
+    return stored ? JSON.parse(stored) : []
+  } catch (error) {
+    console.error("Error retrieving medications from storage:", error)
+    return []
+  }
 }
 
 const saveMedicationsToStorage = (medications: Medication[]) => {
   if (typeof window === "undefined") return
-  localStorage.setItem(MEDICATIONS_KEY, JSON.stringify(medications))
+  try {
+    localStorage.setItem(MEDICATIONS_KEY, JSON.stringify(medications))
+  } catch (error) {
+    console.error("Error saving medications to storage:", error)
+  }
 }
 
 const getDoseLogsFromStorage = (): DoseLog[] => {
   if (typeof window === "undefined") return []
-  const stored = localStorage.getItem(DOSE_LOGS_KEY)
-  return stored ? JSON.parse(stored) : []
+  try {
+    const stored = localStorage.getItem(DOSE_LOGS_KEY)
+    return stored ? JSON.parse(stored) : []
+  } catch (error) {
+    console.error("Error retrieving dose logs from storage:", error)
+    return []
+  }
 }
 
 const saveDoseLogsToStorage = (logs: DoseLog[]) => {
   if (typeof window === "undefined") return
-  localStorage.setItem(DOSE_LOGS_KEY, JSON.stringify(logs))
+  try {
+    localStorage.setItem(DOSE_LOGS_KEY, JSON.stringify(logs))
+  } catch (error) {
+    console.error("Error saving dose logs to storage:", error)
+  }
 }
 
 // Generate unique ID
@@ -243,26 +262,49 @@ export const getAdherenceForMonth = (date: Date) => {
   return monthData
 }
 
-// Initialize with sample data if empty
+// Enhanced initialization with sample data if empty
 export const initializeSampleData = () => {
-  const medications = getMedicationsFromStorage()
+  if (typeof window === "undefined") return
 
-  if (medications.length === 0) {
-    // Add sample medications
-    const sampleMeds = [
-      {
-        medicationName: "Metformin",
-        dosage: "500mg tablet",
-        reminderTimes: ["09:00", "21:00"],
-      },
-      {
-        medicationName: "Lisinopril",
-        dosage: "10mg tablet",
-        reminderTimes: ["08:00"],
-      },
-    ]
+  try {
+    // Check if we've already initialized
+    const isInitialized = localStorage.getItem(INITIALIZED_KEY)
 
-    sampleMeds.forEach((med) => addMedication(med))
+    // If not initialized or medications are empty, add sample data
+    const medications = getMedicationsFromStorage()
+
+    if (!isInitialized || medications.length === 0) {
+      console.log("Initializing MediTrack with sample data...")
+
+      // Add sample medications
+      const sampleMeds = [
+        {
+          medicationName: "Metformin",
+          dosage: "500mg tablet",
+          reminderTimes: ["09:00", "21:00"],
+        },
+        {
+          medicationName: "Lisinopril",
+          dosage: "10mg tablet",
+          reminderTimes: ["08:00"],
+        },
+      ]
+
+      // Clear any existing data to prevent duplicates
+      localStorage.removeItem(MEDICATIONS_KEY)
+      localStorage.removeItem(DOSE_LOGS_KEY)
+
+      // Add sample medications
+      sampleMeds.forEach((med) => addMedication(med))
+
+      // Mark as initialized
+      localStorage.setItem(INITIALIZED_KEY, "true")
+    } else {
+      // If already initialized, just update missed doses
+      updateMissedDoses()
+    }
+  } catch (error) {
+    console.error("Error initializing sample data:", error)
   }
 }
 
@@ -278,13 +320,4 @@ export const markDoseAsTaken = (logId: string) => {
     }
     saveDoseLogsToStorage(logs)
   }
-}
-
-// Add this function at the end of the file
-export const initializeApp = () => {
-  // Update missed doses when app loads
-  updateMissedDoses()
-
-  // Initialize sample data if needed
-  initializeSampleData()
 }
