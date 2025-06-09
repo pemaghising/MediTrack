@@ -81,9 +81,9 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Status Bar */}
-      <div className="bg-white px-4 py-2 flex justify-center items-center text-sm font-medium">
-        <span>{new Date().toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", hour12: false })}</span>
+      {/* Simple Header */}
+      <div className="bg-white px-4 py-3 text-center border-b">
+        <span className="text-sm font-medium text-gray-600">MediTrack</span>
       </div>
 
       {/* Header */}
@@ -94,25 +94,28 @@ export default function HomePage() {
         </div>
 
         {/* Tab Navigation */}
-        <div className="flex gap-1 mb-6">
-          <Button variant="default" className="rounded-full px-6 py-2 bg-gray-900 text-white">
+        <div className="grid grid-cols-2 gap-2 mb-6">
+          <Button variant="default" className="rounded-lg py-2 bg-gray-900 text-white">
             Calendar
           </Button>
-          <Link href="/medications">
-            <Button variant="ghost" className="rounded-full px-6 py-2 text-gray-600">
+          <Link href="/medications" className="w-full">
+            <Button variant="ghost" className="rounded-lg py-2 text-gray-600 w-full">
               Medications
             </Button>
           </Link>
-          <Link href="/calendar">
-            <Button variant="ghost" className="rounded-full px-6 py-2 text-gray-600">
+          <Link href="/calendar" className="w-full">
+            <Button variant="ghost" className="rounded-lg py-2 text-gray-600 w-full">
               Tracking
             </Button>
           </Link>
+          <Button variant="ghost" className="rounded-lg py-2 text-gray-600">
+            Profile
+          </Button>
         </div>
 
         {/* Week Navigation */}
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-semibold text-gray-900">Current week</h2>
+          <h2 className="text-lg font-semibold text-gray-900">Select day</h2>
           <div className="flex gap-2">
             <Button variant="ghost" size="sm" onClick={() => navigateWeek("prev")}>
               <ChevronLeft className="h-4 w-4" />
@@ -123,41 +126,45 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* Week Days */}
-        <div className="grid grid-cols-7 gap-3 mb-8">
+        {/* Week Days - Vertical Layout */}
+        <div className="flex flex-col gap-2 mb-6">
           {weekDays.map((day, index) => (
-            <div key={index} className="text-center">
-              <div className="text-xs text-gray-500 mb-3">{dayLabels[index]}</div>
-              <button
-                onClick={() => setSelectedDate(day)}
-                className={`w-12 h-12 rounded-full flex items-center justify-center text-lg font-medium transition-colors ${
-                  isSelected(day)
-                    ? "bg-green-500 text-white"
-                    : isToday(day)
-                      ? "bg-blue-100 text-blue-600"
-                      : "text-gray-900 hover:bg-gray-100"
-                }`}
-              >
+            <button
+              key={index}
+              onClick={() => setSelectedDate(day)}
+              className={`flex items-center p-3 rounded-lg transition-colors ${
+                isSelected(day)
+                  ? "bg-green-500 text-white"
+                  : isToday(day)
+                    ? "bg-blue-100 text-blue-600"
+                    : "bg-white text-gray-900 hover:bg-gray-100"
+              }`}
+            >
+              <div className="w-10 h-10 rounded-full flex items-center justify-center text-lg font-medium mr-3">
                 {day.getDate()}
-              </button>
-            </div>
+              </div>
+              <div className="text-left">
+                <div className="font-medium">{day.toLocaleDateString("en-US", { weekday: "long" })}</div>
+                <div className="text-sm opacity-80">
+                  {day.toLocaleDateString("en-US", { month: "short", day: "numeric" })}
+                </div>
+              </div>
+            </button>
           ))}
         </div>
       </div>
 
       {/* Selected Day Content */}
-      <div className="px-4 pb-24">
-        <div className="mb-8">
-          <h3 className="text-3xl font-bold text-gray-900 mb-2">
+      <div className="px-4 pb-20">
+        <div className="mb-6">
+          <h3 className="text-2xl font-bold text-gray-900 mb-1">
             {selectedDate.toLocaleDateString("en-US", { weekday: "long" })}
           </h3>
-          <p className="text-lg text-gray-600">
-            {selectedDate.toLocaleDateString("en-US", { month: "long", day: "numeric" })}
-          </p>
+          <p className="text-gray-600">{selectedDate.toLocaleDateString("en-US", { month: "long", day: "numeric" })}</p>
         </div>
 
         {/* Medications Schedule */}
-        <div className="space-y-8">
+        <div className="space-y-6">
           {todaysMeds.length === 0 ? (
             <div className="text-center py-12">
               <div className="w-16 h-16 bg-gray-200 rounded-full mx-auto mb-4 flex items-center justify-center">
@@ -183,23 +190,23 @@ export default function HomePage() {
               .sort((a, b) => a.time.localeCompare(b.time))
               .map((group) => (
                 <div key={group.time}>
-                  <h4 className="text-3xl font-bold text-gray-900 mb-6">{formatTime(group.time)}</h4>
-                  <div className="space-y-4">
+                  <h4 className="text-2xl font-bold text-gray-900 mb-4">{formatTime(group.time)}</h4>
+                  <div className="space-y-3">
                     {group.medications.map(({ medication, log }: any) => (
                       <Card key={log.logID} className="bg-white border-0 shadow-sm">
-                        <CardContent className="p-6">
+                        <CardContent className="p-4">
                           <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-6">
+                            <div className="flex items-center gap-4">
                               <button
                                 onClick={() => handleMarkAsTaken(log.logID)}
-                                className={`w-8 h-8 rounded-full border-2 flex items-center justify-center transition-colors ${
+                                className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors ${
                                   log.status === "Taken"
                                     ? "bg-green-500 border-green-500"
                                     : "border-gray-300 hover:border-green-500"
                                 }`}
                               >
                                 {log.status === "Taken" && (
-                                  <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                  <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
                                     <path
                                       fillRule="evenodd"
                                       d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
@@ -209,11 +216,11 @@ export default function HomePage() {
                                 )}
                               </button>
                               <div>
-                                <h5 className="font-semibold text-gray-900 text-lg">{medication.medicationName}</h5>
-                                <p className="text-gray-600">{medication.dosage}</p>
+                                <h5 className="font-semibold text-gray-900">{medication.medicationName}</h5>
+                                <p className="text-sm text-gray-600">{medication.dosage}</p>
                               </div>
                             </div>
-                            <ChevronRight className="h-6 w-6 text-gray-400" />
+                            <ChevronRight className="h-5 w-5 text-gray-400" />
                           </div>
                         </CardContent>
                       </Card>
