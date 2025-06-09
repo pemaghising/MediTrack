@@ -94,19 +94,8 @@ export default function CalendarPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Status Bar */}
-      <div className="bg-white px-4 py-2 flex justify-between items-center text-sm font-medium">
+      <div className="bg-white px-4 py-2 flex justify-center items-center text-sm font-medium">
         <span>{new Date().toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", hour12: false })}</span>
-        <div className="flex items-center gap-1">
-          <div className="flex gap-1">
-            <div className="w-1 h-3 bg-gray-900 rounded-full"></div>
-            <div className="w-1 h-3 bg-gray-900 rounded-full"></div>
-            <div className="w-1 h-3 bg-gray-900 rounded-full"></div>
-            <div className="w-1 h-3 bg-gray-400 rounded-full"></div>
-          </div>
-          <div className="w-4 h-3 border border-gray-900 rounded-sm ml-2">
-            <div className="w-3 h-2 bg-gray-900 rounded-sm m-0.5"></div>
-          </div>
-        </div>
       </div>
 
       {/* Header */}
@@ -133,9 +122,6 @@ export default function CalendarPage() {
           <Button variant="default" className="rounded-full px-6 py-2 bg-gray-900 text-white">
             Tracking
           </Button>
-          <Button variant="ghost" className="rounded-full px-6 py-2 text-gray-600">
-            Profile
-          </Button>
         </div>
 
         {/* Month Navigation */}
@@ -155,26 +141,26 @@ export default function CalendarPage() {
       </div>
 
       {/* Calendar Content */}
-      <div className="px-4 pb-6">
+      <div className="px-4 pb-8">
         {/* Legend */}
-        <Card className="mb-4 bg-white border-0 shadow-sm">
-          <CardContent className="p-4">
-            <div className="text-sm space-y-2">
-              <div className="flex items-center gap-2">
-                <div className="w-4 h-4 bg-green-100 border border-green-300 rounded"></div>
-                <span>All medications taken</span>
+        <Card className="mb-6 bg-white border-0 shadow-sm">
+          <CardContent className="p-6">
+            <div className="space-y-3">
+              <div className="flex items-center gap-3">
+                <div className="w-5 h-5 bg-green-100 border border-green-300 rounded"></div>
+                <span className="text-base">All medications taken</span>
               </div>
-              <div className="flex items-center gap-2">
-                <div className="w-4 h-4 bg-yellow-100 border border-yellow-300 rounded"></div>
-                <span>Some medications taken</span>
+              <div className="flex items-center gap-3">
+                <div className="w-5 h-5 bg-yellow-100 border border-yellow-300 rounded"></div>
+                <span className="text-base">Some medications taken</span>
               </div>
-              <div className="flex items-center gap-2">
-                <div className="w-4 h-4 bg-red-100 border border-red-300 rounded"></div>
-                <span>No medications taken</span>
+              <div className="flex items-center gap-3">
+                <div className="w-5 h-5 bg-red-100 border border-red-300 rounded"></div>
+                <span className="text-base">No medications taken</span>
               </div>
-              <div className="flex items-center gap-2">
-                <div className="w-4 h-4 bg-gray-100 rounded"></div>
-                <span>No medications scheduled</span>
+              <div className="flex items-center gap-3">
+                <div className="w-5 h-5 bg-gray-100 rounded"></div>
+                <span className="text-base">No medications scheduled</span>
               </div>
             </div>
           </CardContent>
@@ -182,29 +168,29 @@ export default function CalendarPage() {
 
         {/* Calendar Grid */}
         <Card className="bg-white border-0 shadow-sm">
-          <CardContent className="p-4">
+          <CardContent className="p-6">
             {/* Day headers */}
-            <div className="grid grid-cols-7 gap-1 mb-2">
+            <div className="grid grid-cols-7 gap-2 mb-4">
               {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
-                <div key={day} className="text-center text-sm font-medium text-gray-600 py-2">
+                <div key={day} className="text-center text-sm font-medium text-gray-600 py-3">
                   {day}
                 </div>
               ))}
             </div>
 
             {/* Calendar days */}
-            <div className="grid grid-cols-7 gap-1">
+            <div className="grid grid-cols-7 gap-2">
               {calendarDays.map((day, index) => (
                 <Dialog key={index}>
                   <DialogTrigger asChild>
                     <button
                       className={`
-                        aspect-square p-1 text-sm rounded border-2 border-transparent
-                        ${day.isCurrentMonth ? "" : "opacity-30"}
-                        ${day.dayData ? getDayColor(day.dayData.adherenceRate, day.dayData.totalScheduled) : "bg-gray-100"}
-                        ${day.dayData ? getDayTextColor(day.dayData.adherenceRate, day.dayData.totalScheduled) : "text-gray-600"}
-                        hover:border-gray-300 transition-colors
-                      `}
+                  aspect-square p-2 text-base rounded border-2 border-transparent
+                  ${day.isCurrentMonth ? "" : "opacity-30"}
+                  ${day.dayData ? getDayColor(day.dayData.adherenceRate, day.dayData.totalScheduled) : "bg-gray-100"}
+                  ${day.dayData ? getDayTextColor(day.dayData.adherenceRate, day.dayData.totalScheduled) : "text-gray-600"}
+                  hover:border-gray-300 transition-colors
+                `}
                       disabled={!day.dayData || day.dayData.totalScheduled === 0}
                     >
                       <div className="w-full h-full flex items-center justify-center font-medium">

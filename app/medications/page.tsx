@@ -60,19 +60,8 @@ export default function MedicationsPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Status Bar */}
-      <div className="bg-white px-4 py-2 flex justify-between items-center text-sm font-medium">
+      <div className="bg-white px-4 py-2 flex justify-center items-center text-sm font-medium">
         <span>{new Date().toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", hour12: false })}</span>
-        <div className="flex items-center gap-1">
-          <div className="flex gap-1">
-            <div className="w-1 h-3 bg-gray-900 rounded-full"></div>
-            <div className="w-1 h-3 bg-gray-900 rounded-full"></div>
-            <div className="w-1 h-3 bg-gray-900 rounded-full"></div>
-            <div className="w-1 h-3 bg-gray-400 rounded-full"></div>
-          </div>
-          <div className="w-4 h-3 border border-gray-900 rounded-sm ml-2">
-            <div className="w-3 h-2 bg-gray-900 rounded-sm m-0.5"></div>
-          </div>
-        </div>
       </div>
 
       {/* Header */}
@@ -99,54 +88,53 @@ export default function MedicationsPage() {
               Tracking
             </Button>
           </Link>
-          <Button variant="ghost" className="rounded-full px-6 py-2 text-gray-600">
-            Profile
-          </Button>
         </div>
       </div>
 
       {/* Content */}
-      <div className="px-4 pb-20">
+      <div className="px-4 pb-24">
         {medications.length === 0 ? (
-          <div className="text-center py-12">
-            <div className="w-16 h-16 bg-gray-200 rounded-full mx-auto mb-4 flex items-center justify-center">
-              <Plus className="h-8 w-8 text-gray-400" />
+          <div className="text-center py-16">
+            <div className="w-20 h-20 bg-gray-200 rounded-full mx-auto mb-6 flex items-center justify-center">
+              <Plus className="h-10 w-10 text-gray-400" />
             </div>
-            <p className="text-gray-600 mb-4">No medications added yet</p>
+            <p className="text-lg text-gray-600 mb-6">No medications added yet</p>
             <Link href="/medications/add">
-              <Button className="bg-green-500 hover:bg-green-600 text-white rounded-full px-6">Add Medication</Button>
+              <Button className="bg-green-500 hover:bg-green-600 text-white rounded-full px-8 py-3 text-lg">
+                Add Medication
+              </Button>
             </Link>
           </div>
         ) : (
-          <div className="space-y-3">
+          <div className="space-y-4">
             {medications.map((medication) => (
               <Card key={medication.medicationID} className="bg-white border-0 shadow-sm">
-                <CardContent className="p-4">
+                <CardContent className="p-6">
                   <div className="flex items-center justify-between">
                     <div className="flex-1">
-                      <h3 className="font-semibold text-gray-900 text-lg mb-1">{medication.medicationName}</h3>
-                      <p className="text-gray-600 mb-2">{medication.dosage}</p>
-                      <Badge variant="outline" className="text-xs">
+                      <h3 className="font-semibold text-gray-900 text-xl mb-2">{medication.medicationName}</h3>
+                      <p className="text-gray-600 mb-3 text-lg">{medication.dosage}</p>
+                      <Badge variant="outline" className="text-sm mb-3">
                         {getScheduleSummary(medication.reminderTimes)}
                       </Badge>
-                      <div className="flex flex-wrap gap-1 mt-2">
+                      <div className="flex flex-wrap gap-2 mt-3">
                         {medication.reminderTimes.map((time, index) => (
-                          <Badge key={index} variant="secondary" className="text-xs">
+                          <Badge key={index} variant="secondary" className="text-sm">
                             {formatTime(time)}
                           </Badge>
                         ))}
                       </div>
                     </div>
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-3">
                       <Link href={`/medications/edit/${medication.medicationID}`}>
                         <Button variant="ghost" size="sm">
-                          <Edit className="h-4 w-4" />
+                          <Edit className="h-5 w-5" />
                         </Button>
                       </Link>
                       <AlertDialog>
                         <AlertDialogTrigger asChild>
                           <Button variant="ghost" size="sm" className="text-red-600 hover:text-red-700">
-                            <Trash2 className="h-4 w-4" />
+                            <Trash2 className="h-5 w-5" />
                           </Button>
                         </AlertDialogTrigger>
                         <AlertDialogContent>
@@ -168,7 +156,7 @@ export default function MedicationsPage() {
                           </AlertDialogFooter>
                         </AlertDialogContent>
                       </AlertDialog>
-                      <ChevronRight className="h-5 w-5 text-gray-400" />
+                      <ChevronRight className="h-6 w-6 text-gray-400" />
                     </div>
                   </div>
                 </CardContent>

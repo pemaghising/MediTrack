@@ -86,6 +86,11 @@ export default function EditMedicationPage({ params }: { params: { id: string } 
 
   return (
     <div className="min-h-screen bg-background">
+      {/* Status Bar */}
+      <div className="bg-white px-4 py-2 flex justify-center items-center text-sm font-medium">
+        <span>{new Date().toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", hour12: false })}</span>
+      </div>
+
       {/* Header */}
       <div className="border-b bg-white sticky top-0 z-10">
         <div className="max-w-md mx-auto px-4 py-3">
@@ -123,12 +128,12 @@ export default function EditMedicationPage({ params }: { params: { id: string } 
         </div>
       </div>
 
-      <div className="max-w-md mx-auto p-4">
-        <Card>
-          <CardHeader>
-            <CardTitle>Medication Details</CardTitle>
+      <div className="px-4 pb-8">
+        <Card className="bg-white border-0 shadow-sm">
+          <CardHeader className="pb-4">
+            <CardTitle className="text-xl">Medication Details</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-6">
+          <CardContent className="space-y-8">
             <div className="space-y-2">
               <Label htmlFor="medication-name">Medicine Name *</Label>
               <Input
@@ -260,12 +265,12 @@ export default function EditMedicationPage({ params }: { params: { id: string } 
           </CardContent>
         </Card>
 
-        <div className="mt-6 space-y-3">
-          <Button onClick={handleSave} className="w-full" size="lg">
+        <div className="mt-8 space-y-4">
+          <Button onClick={handleSave} className="w-full bg-green-500 hover:bg-green-600 text-white" size="lg">
             Save Changes
           </Button>
           <Link href="/medications">
-            <Button variant="outline" className="w-full">
+            <Button variant="outline" className="w-full" size="lg">
               Cancel
             </Button>
           </Link>
