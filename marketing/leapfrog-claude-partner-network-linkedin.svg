@@ -1,6 +1,15 @@
 <svg width="1080" height="1350" viewBox="0 0 1080 1350" fill="none" xmlns="http://www.w3.org/2000/svg">
 <title>Leapfrog × Anthropic — Claude Partner Network</title>
 <defs>
+<linearGradient id="bgBase" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0" stop-color="#FBFAF6"/><stop offset="1" stop-color="#F5F0E6"/>
+</linearGradient>
+<radialGradient id="glowWarm" cx="1" cy="0" r="0.75">
+<stop offset="0" stop-color="#D97757" stop-opacity="0.16"/><stop offset="0.55" stop-color="#D97757" stop-opacity="0.05"/><stop offset="1" stop-color="#D97757" stop-opacity="0"/>
+</radialGradient>
+<radialGradient id="glowSand" cx="0" cy="1" r="0.7">
+<stop offset="0" stop-color="#E6C9A8" stop-opacity="0.35"/><stop offset="1" stop-color="#E6C9A8" stop-opacity="0"/>
+</radialGradient>
 <clipPath id="page"><rect width="1080" height="1350"/></clipPath>
 <mask id="mask0_14287_422" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="1382" y="331" width="217" height="217">
 <path d="M1598.19 331.367H1382.59V547.623H1598.19V331.367Z" fill="white" />
@@ -8,7 +17,10 @@
 
 </defs>
 <g clip-path="url(#page)">
-<rect width="1080" height="1350" fill="#FAF9F5"/>
+<rect width="1080" height="1350" fill="url(#bgBase)"/>
+<rect width="1080" height="1350" fill="url(#glowWarm)"/>
+<rect width="1080" height="1350" fill="url(#glowSand)"/>
+
 <!-- decorative arcs -->
 <g transform="translate(1080 0) scale(-1 1)"><path opacity="0.12" fill-rule="evenodd" clip-rule="evenodd" d="M-150 -220C-150 23.0299 47.1869 220.043 290.429 220.043H327.648V83.6918H290.429C122.557 83.6918 -13.529 -52.2758 -13.529 -220H-150Z" stroke="#C15F3C" stroke-width="5" />
 </g>
